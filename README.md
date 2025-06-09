@@ -1,5 +1,5 @@
 # TicTacToe Android App
-![App Demo](tic-min.gif)
+![App Demo](tic-min-min.gif)
 
 A classic TicTacToe game built for Android devices with player vs computer gameplay, win tracking, and game history features.
 
