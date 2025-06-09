@@ -13,60 +13,50 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class WinLogActivity extends AppCompatActivity {
-MyDatabaseHelper myDB;
-RecyclerView recyclerView;
+    MyDatabaseHelper myDB;
+    RecyclerView recyclerView;
     Log[] arr;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.win_track);
+
+        // Handle window insets (status bar, navigation bar)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-
         });
 
+        myDB = new MyDatabaseHelper(this);
+        displayData(); // Load data from the database
 
-        myDB = new MyDatabaseHelper(WinLogActivity.this);
-        displayData();
-
+        // Set up RecyclerView
         recyclerView = findViewById(R.id.rv);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        RecyclerViewCustomAdapter adapter = new RecyclerViewCustomAdapter(arr);
-        recyclerView.setAdapter(adapter);
-
-
-
-
-
+        recyclerView.setAdapter(new RecyclerViewCustomAdapter(arr));
     }
-    void displayData(){
-        int index=0;
+
+    // Reads data from the database and fills the 'arr' array
+    void displayData() {
+        int index = 0;
         Cursor cursor = myDB.readAllData();
-        if (cursor.getCount()==0){
-            Toast.makeText(this,"No Data",Toast.LENGTH_SHORT).show();
-        }else{
-            arr=new Log[cursor.getCount()];
-            while (cursor.moveToNext()){
-                long id=cursor.getLong(0);
-                String winner =cursor.getString(1);
-                int moves =cursor.getInt(2);
-                String date=cursor.getString(3);
-                Log log=new Log(id,winner,moves,date);
-                arr[index]=log;
-                index++;
 
-
+        if (cursor.getCount() == 0) {
+            Toast.makeText(this, "No Data", Toast.LENGTH_SHORT).show();
+        } else {
+            arr = new Log[cursor.getCount()];
+            while (cursor.moveToNext()) {
+                Log log = new Log(
+                        cursor.getLong(0),
+                        cursor.getString(1),
+                        cursor.getInt(2),
+                        cursor.getString(3)
+                );
+                arr[index++] = log;
             }
-
         }
-
-
-
-
     }
-
-
 }
