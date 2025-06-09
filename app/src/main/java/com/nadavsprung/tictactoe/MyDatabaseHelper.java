@@ -9,6 +9,8 @@ import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 
+import java.util.Date;
+
 class MyDatabaseHelper extends SQLiteOpenHelper {
 
     private Context context;
@@ -28,8 +30,7 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = "CREATE TABLE " + TABLE_NAME +
-                " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        String query = "CREATE TABLE " + TABLE_NAME + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_WINNER + " TEXT, " +
                 COLUMN_MOVES + " INTEGER, " +
                 COLUMN_DATE + " TEXT);";
@@ -57,7 +58,7 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     Cursor readAllData(){
-        String query = "SELECT * FROM " + TABLE_NAME;
+        String query = "SELECT * FROM " + TABLE_NAME + " ORDER BY "+COLUMN_DATE+" DESC";
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
