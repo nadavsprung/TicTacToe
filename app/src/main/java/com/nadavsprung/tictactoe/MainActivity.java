@@ -1,5 +1,6 @@
 package com.nadavsprung.tictactoe;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
     // Called when a player taps a cell
     public void playerTap(View v) {
-        if (gameOver) return;
+        if (gameOver)
+            return;
 
         int boxNum = Integer.parseInt(v.getTag().toString());
         game.setSpot(boxNum); // Update logic with player move
@@ -59,10 +64,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Check for win condition after the move
         if (game.didWin()) {
+            MyDatabaseHelper db=new MyDatabaseHelper(MainActivity.this);
+
             if (game.getPlayerTurn() == 1) {
                 updateText("X Won!!!");
+                db.addLog("X",game.getMoves(),getDate());
             } else {
                 updateText("O Won!!!");
+                db.addLog("0",game.getMoves(),getDate());
             }
             gameOver = true;
             gameEnd(); // Show "Play Again" and lock board
@@ -74,11 +83,7 @@ public class MainActivity extends AppCompatActivity {
         Button b = findViewById(R.id.playAgain);
         b.setVisibility(View.VISIBLE);
 
-        // Disable all cells from being clickable
-        for (int i = 0; i < 9; i++) {
-            ImageView cell = findViewById(getResources().getIdentifier("imageView" + i, "id", getPackageName()));
-            cell.setClickable(false);
-        }
+
     }
 
     // Called when user presses "Play Again"
@@ -130,6 +135,23 @@ public class MainActivity extends AppCompatActivity {
         if (v != null) {
             playerTap(v); // Simulate the tap for computer
         }
+    }
+
+
+    public void goToLog(View v){
+        Intent i =new Intent(MainActivity.this, WinLogActivity.class);
+        startActivity(i);
+
+    }
+
+    public String getDate (){
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDateAndTime = sdf.format(new Date());
+
+        return currentDateAndTime;
+
     }
 
 

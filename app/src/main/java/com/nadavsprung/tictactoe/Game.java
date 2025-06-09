@@ -94,4 +94,16 @@ public class Game {
 
         return -1; // Fallback, should never happen
     }
+    public int getMoves(){
+        int count=0;
+        for (int i = 0; i < spot.length; i++) {
+            if (0==spot[i]){
+                count++;
+            }
+
+        }
+        return 9-count;
+    }
+
+
 }
