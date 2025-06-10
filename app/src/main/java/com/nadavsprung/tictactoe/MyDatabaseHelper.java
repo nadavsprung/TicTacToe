@@ -58,7 +58,7 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
         if (result == -1) {
             Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(context, "Added Successfully!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Added Successfully! ID - "+result, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -73,20 +73,4 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    // Delete a single row by ID
-    void deleteOneRow(String row_id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        long result = db.delete(TABLE_NAME, "_id=?", new String[]{row_id});
-        if (result == -1) {
-            Toast.makeText(context, "Failed to Delete.", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, "Successfully Deleted.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    // Delete all data from the table
-    void deleteAllData() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_NAME);
-    }
 }
