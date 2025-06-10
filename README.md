@@ -31,12 +31,6 @@ A classic TicTacToe game built for Android devices with player vs computer gamep
 - **Java Version**: 11
 - **Gradle**: Kotlin DSL
 
-### Dependencies
-- AndroidX AppCompat
-- Material Design Components
-- ConstraintLayout
-- JUnit (Testing)
-- Espresso (UI Testing)
 
 ### Architecture
 The app follows a simple MVC pattern:
@@ -47,12 +41,6 @@ The app follows a simple MVC pattern:
 - **RecyclerViewCustomAdapter.java**: Adapter for displaying game history
 - **Log.java**: Data model for game log entries
 
-## 🛠️ Setup and Installation
-
-### Prerequisites
-- Android Studio Arctic Fox or later
-- Android SDK 35
-- Java 11 JDK
 
 ### Building the Project
 
@@ -76,14 +64,6 @@ The app follows a simple MVC pattern:
    - Click the "Run" button (green triangle) or press `Shift + F10`
    - Select your target device and click "OK"
 
-### Alternative Installation
-You can also build the APK from the command line:
-
-```bash
-./gradlew assembleDebug
-```
-
-The APK will be generated in `app/build/outputs/apk/debug/`
 
 ## 📱 App Structure
 
@@ -104,22 +84,6 @@ app/src/main/
 └── AndroidManifest.xml
 ```
 
-## 🎯 Future Enhancements
-
-- Add multiplayer support (player vs player)
-- Implement different difficulty levels for AI
-- Add sound effects and animations
-- Include game statistics and analytics
-- Add customizable themes
-- Implement online leaderboards
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## 📄 License
 
