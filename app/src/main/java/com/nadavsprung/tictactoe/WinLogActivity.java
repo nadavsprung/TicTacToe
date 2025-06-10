@@ -36,7 +36,8 @@ public class WinLogActivity extends AppCompatActivity {
         // Set up RecyclerView
         recyclerView = findViewById(R.id.rv);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new RecyclerViewCustomAdapter(arr));
+        RecyclerViewCustomAdapter adapter = new RecyclerViewCustomAdapter(arr);
+        recyclerView.setAdapter(adapter);
     }
 
     // Reads data from the database and fills the 'arr' array
