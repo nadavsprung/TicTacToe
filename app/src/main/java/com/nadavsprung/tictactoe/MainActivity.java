@@ -20,10 +20,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
-
     private Game game; // Game logic handler
     private SharedPreferences sharedPreferences;
     private String savedUsername;
+    Game[] arrgame=new Game[9];
+    int[]boardwinners=new int[9];
+    int activeboard;
     private boolean gameOver = false; // Tracks if the game has ended
 
 
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         setupUltimateTicTacToe();
+        setupgame();
 
         // Handle screen padding for system UI (like status bar)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -58,6 +61,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 //setting the tags for board/cell to help identify
+
+  public void setupgame(){
+
+      for (int i = 0; i < 9; i++) {
+          arrgame[i] = new Game();  // Initialize each board
+      }
+
+  }
+
     public void setupUltimateTicTacToe() {
         for (int boardNum = 0; boardNum < 9; boardNum++) {
             int boardId = getResources().getIdentifier("board_" + boardNum, "id", getPackageName());
@@ -73,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     // Called when a player taps a cell
     public void playerTap(View v) {
         if (gameOver)
@@ -82,7 +95,9 @@ public class MainActivity extends AppCompatActivity {
         String[] parts = tag.split("_");
         int boardNum = Integer.parseInt(parts[0]);  // 0-8
         int cellNum = Integer.parseInt(parts[1]);   // 0-8
-        game.setSpot(cellNum); // Update logic with player move
+        arrgame[boardNum].setSpot(cellNum);// Update logic with player move
+        activeboard=cellNum;
+
 
         if (game.getPlayerTurn() == 2) {
             ((ImageView) v).setImageResource(R.drawable.x);
@@ -114,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
             gameEnd(); // Show "Play Again" and lock board
         }
     }
+
 
     // Called at the end of a game to lock board and show reset button
     public void gameEnd() {
@@ -154,20 +170,16 @@ public class MainActivity extends AppCompatActivity {
 
     // Handles the computer's move on the board
     private void updateComputerUIMove() {
-        int x = game.computerMove(); // Get random available spot
 
+        int x=arrgame[activeboard].computerMove();
         ImageView v = null;
-        switch (x) {
-            case 0: v = findViewById(R.id.imageView0); break;
-            case 1: v = findViewById(R.id.imageView1); break;
-            case 2: v = findViewById(R.id.imageView2); break;
-            case 3: v = findViewById(R.id.imageView3); break;
-            case 4: v = findViewById(R.id.imageView4); break;
-            case 5: v = findViewById(R.id.imageView5); break;
-            case 6: v = findViewById(R.id.imageView6); break;
-            case 7: v = findViewById(R.id.imageView7); break;
-            case 8: v = findViewById(R.id.imageView8); break;
-        }
+        // Find the board layout
+        int boardId = getResources().getIdentifier("board_" + activeboard, "id", getPackageName());
+        LinearLayout board = findViewById(boardId);
+
+        // Then find the cell within that board
+        int cellId = getResources().getIdentifier("imageView" + x, "id", getPackageName());
+         v = board.findViewById(cellId);
 
         if (v != null) {
             playerTap(v); // Simulate the tap for computer
