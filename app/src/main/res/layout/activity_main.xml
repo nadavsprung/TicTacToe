@@ -21,6 +21,7 @@
 
     <ImageView
         android:id="@+id/imageView"
+
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -50,35 +51,35 @@
             >
 
 
-            <ImageView
-                android:id="@+id/imageView0"
+            <include layout="@layout/tic_tac_toe_layout"
+                android:id="@+id/board_0"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:onClick="playerTap"
                 android:padding="20dp"
-                android:tag="0"
-
+                android:tag="board_0"
                 />
 
-            <ImageView
-                android:id="@+id/imageView1"
+
+
+            <include layout="@layout/tic_tac_toe_layout"
+                android:id="@+id/board_1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:onClick="playerTap"
                 android:padding="20dp"
-                android:tag="1" />
+                android:tag="board_1"
+                />
 
-            <ImageView
-                android:id="@+id/imageView2"
+
+            <include layout="@layout/tic_tac_toe_layout"
+                android:id="@+id/board_2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:onClick="playerTap"
                 android:padding="20dp"
-                android:tag="2" />
-
+                android:tag="board_2"
+                />
 
         </LinearLayout>
 
@@ -88,34 +89,32 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/imageView3"
+            <include layout="@layout/tic_tac_toe_layout"
+                android:id="@+id/board_3"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:onClick="playerTap"
                 android:padding="20dp"
-                android:tag="3"
-
+                android:tag="board_3"
                 />
 
-            <ImageView
-                android:id="@+id/imageView4"
+            <include layout="@layout/tic_tac_toe_layout"
+                android:id="@+id/board_4"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:onClick="playerTap"
                 android:padding="20dp"
-                android:tag="4" />
+                android:tag="board_4"
+                />
 
-            <ImageView
-                android:id="@+id/imageView5"
+            <include layout="@layout/tic_tac_toe_layout"
+                android:id="@+id/board_5"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:onClick="playerTap"
                 android:padding="20dp"
-                android:tag="5" />
+                android:tag="board_5"
+                />
 
         </LinearLayout>
 
@@ -125,34 +124,32 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/imageView6"
+            <include layout="@layout/tic_tac_toe_layout"
+                android:id="@+id/board_6"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:onClick="playerTap"
                 android:padding="20dp"
-                android:tag="6"
-
+                android:tag="board_6"
                 />
 
-            <ImageView
-                android:id="@+id/imageView7"
+            <include layout="@layout/tic_tac_toe_layout"
+                android:id="@+id/board_7"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:onClick="playerTap"
                 android:padding="20dp"
-                android:tag="7" />
+                android:tag="board_7"
+                />
 
-            <ImageView
-                android:id="@+id/imageView8"
+            <include layout="@layout/tic_tac_toe_layout"
+                android:id="@+id/board_8"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:onClick="playerTap"
                 android:padding="20dp"
-                android:tag="8" />
+                android:tag="board_8"
+                />
 
 
         </LinearLayout>
