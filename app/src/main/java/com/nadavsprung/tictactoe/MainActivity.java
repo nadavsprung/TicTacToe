@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -25,11 +26,15 @@ public class MainActivity extends AppCompatActivity {
     private String savedUsername;
     private boolean gameOver = false; // Tracks if the game has ended
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        setupUltimateTicTacToe();
 
         // Handle screen padding for system UI (like status bar)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -37,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
 
         // Initialize UI and game logic
         updateText("Starting game...");
@@ -47,6 +53,24 @@ public class MainActivity extends AppCompatActivity {
         t.setText(savedUsername);
 
 
+
+
+
+    }
+//setting the tags for board/cell to help identify
+    public void setupUltimateTicTacToe() {
+        for (int boardNum = 0; boardNum < 9; boardNum++) {
+            int boardId = getResources().getIdentifier("board_" + boardNum, "id", getPackageName());
+            LinearLayout board = findViewById(boardId);
+
+            for (int cellNum = 0; cellNum < 9; cellNum++) {
+                int cellId = getResources().getIdentifier("imageView" + cellNum, "id", getPackageName());
+                ImageView cell = board.findViewById(cellId);
+                if (cell != null) {
+                    cell.setTag(boardNum + "_" + cellNum);  // e.g., "3_5" = board 3, cell 5
+                }
+            }
+        }
     }
 
     // Called when a player taps a cell
@@ -54,8 +78,11 @@ public class MainActivity extends AppCompatActivity {
         if (gameOver)
             return;
 
-        int boxNum = Integer.parseInt(v.getTag().toString());
-        game.setSpot(boxNum); // Update logic with player move
+        String tag = v.getTag().toString();
+        String[] parts = tag.split("_");
+        int boardNum = Integer.parseInt(parts[0]);  // 0-8
+        int cellNum = Integer.parseInt(parts[1]);   // 0-8
+        game.setSpot(cellNum); // Update logic with player move
 
         if (game.getPlayerTurn() == 2) {
             ((ImageView) v).setImageResource(R.drawable.x);
