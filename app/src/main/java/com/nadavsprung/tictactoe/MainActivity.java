@@ -23,12 +23,10 @@ public class MainActivity extends AppCompatActivity {
     private Game game; // Game logic handler
     private SharedPreferences sharedPreferences;
     private String savedUsername;
-    Game[] arrgame=new Game[9];
-    int[]boardwinners=new int[9];
-    int activeboard;
+    Game[] arrgame = new Game[9];
+    int[] boardwinners = new int[9];
+    int activeboard=-1;
     private boolean gameOver = false; // Tracks if the game has ended
-
-
 
 
     @Override
@@ -56,19 +54,16 @@ public class MainActivity extends AppCompatActivity {
         t.setText(savedUsername);
 
 
-
-
-
     }
 //setting the tags for board/cell to help identify
 
-  public void setupgame(){
+    public void setupgame() {
 
-      for (int i = 0; i < 9; i++) {
-          arrgame[i] = new Game();  // Initialize each board
-      }
+        for (int i = 0; i < 9; i++) {
+            arrgame[i] = new Game();  // Initialize each board
+        }
 
-  }
+    }
 
     public void setupUltimateTicTacToe() {
         for (int boardNum = 0; boardNum < 9; boardNum++) {
@@ -95,8 +90,29 @@ public class MainActivity extends AppCompatActivity {
         String[] parts = tag.split("_");
         int boardNum = Integer.parseInt(parts[0]);  // 0-8
         int cellNum = Integer.parseInt(parts[1]);   // 0-8
+
+        if (boardNum!=activeboard && activeboard!=-1)return;
+
         arrgame[boardNum].setSpot(cellNum);// Update logic with player move
-        activeboard=cellNum;
+
+        // Store old active board before changing it
+        int oldActiveBoard = activeboard;
+        activeboard = cellNum;
+
+        // Update board backgrounds - ADD THIS CODE
+        if (oldActiveBoard >= 0 && oldActiveBoard <= 8) {
+            LinearLayout oldBoard = findViewById(getResources().getIdentifier("board_" + oldActiveBoard, "id", getPackageName()));
+            oldBoard.setBackgroundResource(R.drawable.board_inactive_boarder);
+        }
+
+        // Set new active board to active (red border)
+        LinearLayout newBoard = findViewById(getResources().getIdentifier("board_" + activeboard, "id", getPackageName()));
+        newBoard.setBackgroundResource(R.drawable.board_active_boarder);
+
+
+
+
+
 
 
         if (game.getPlayerTurn() == 2) {
@@ -116,17 +132,18 @@ public class MainActivity extends AppCompatActivity {
 
         // Check for win condition after the move
         if (game.didWin()) {
-            MyDatabaseHelper db=new MyDatabaseHelper(MainActivity.this);
+            MyDatabaseHelper db = new MyDatabaseHelper(MainActivity.this);
 
             if (game.getPlayerTurn() == 1) {
                 updateText("X Won!!!");
-                db.addLog("X",game.getMoves(),getDate());
+                db.addLog("X", game.getMoves(), getDate());
             } else {
                 updateText("O Won!!!");
-                db.addLog("0",game.getMoves(),getDate());
+                db.addLog("0", game.getMoves(), getDate());
             }
             gameOver = true;
             gameEnd(); // Show "Play Again" and lock board
+
         }
     }
 
@@ -171,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
     // Handles the computer's move on the board
     private void updateComputerUIMove() {
 
-        int x=arrgame[activeboard].computerMove();
+        int x = arrgame[activeboard].computerMove();
         ImageView v = null;
         // Find the board layout
         int boardId = getResources().getIdentifier("board_" + activeboard, "id", getPackageName());
@@ -179,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Then find the cell within that board
         int cellId = getResources().getIdentifier("imageView" + x, "id", getPackageName());
-         v = board.findViewById(cellId);
+        v = board.findViewById(cellId);
 
         if (v != null) {
             playerTap(v); // Simulate the tap for computer
@@ -187,13 +204,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void goToLog(View v){
-        Intent i =new Intent(MainActivity.this, WinLogActivity.class);
+    public void goToLog(View v) {
+        Intent i = new Intent(MainActivity.this, WinLogActivity.class);
         startActivity(i);
 
     }
 
-    public String getDate (){
+    public String getDate() {
 
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

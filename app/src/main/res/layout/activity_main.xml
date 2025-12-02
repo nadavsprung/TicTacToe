@@ -58,6 +58,7 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:tag="board_0"
+                android:background="@drawable/board_inactive_boarder"
                 />
 
 
@@ -69,6 +70,8 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:tag="board_1"
+                android:background="@drawable/board_inactive_boarder"
+
                 />
 
 
@@ -79,6 +82,8 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:tag="board_2"
+                android:background="@drawable/board_inactive_boarder"
+
                 />
 
         </LinearLayout>
@@ -96,6 +101,10 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:tag="board_3"
+                android:background="@drawable/board_inactive_boarder"
+
+
+
                 />
 
             <include layout="@layout/tic_tac_toe_layout"
@@ -105,6 +114,8 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:tag="board_4"
+                android:background="@drawable/board_inactive_boarder"
+
                 />
 
             <include layout="@layout/tic_tac_toe_layout"
@@ -114,6 +125,8 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:tag="board_5"
+                android:background="@drawable/board_inactive_boarder"
+
                 />
 
         </LinearLayout>
@@ -131,6 +144,8 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:tag="board_6"
+                android:background="@drawable/board_inactive_boarder"
+
                 />
 
             <include layout="@layout/tic_tac_toe_layout"
@@ -140,6 +155,8 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:tag="board_7"
+                android:background="@drawable/board_inactive_boarder"
+
                 />
 
             <include layout="@layout/tic_tac_toe_layout"
@@ -149,6 +166,8 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:tag="board_8"
+                android:background="@drawable/board_inactive_boarder"
+
                 />
 
 
