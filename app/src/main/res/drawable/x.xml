@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- First diagonal line of X (top-left to bottom-right) -->
+    <path
+        android:pathData="M20,20 L180,180 L164,196 L4,36 Z"
+        android:fillColor="#2196F3"
+        android:strokeWidth="0"/>
+
+    <!-- Second diagonal line of X (top-right to bottom-left) -->
+    <path
+        android:pathData="M180,20 L196,36 L36,196 L20,180 Z"
+        android:fillColor="#2196F3"
+        android:strokeWidth="0"/>
+    
+</vector>
