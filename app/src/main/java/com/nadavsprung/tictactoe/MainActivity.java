@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         // Store old active board before changing it
         int oldActiveBoard = activeboard;
         activeboard = cellNum;
-        checkIfBoardWon(boardNum);
+       
 
         // Update board backgrounds - ADD THIS CODE
         if (oldActiveBoard >= 0 && oldActiveBoard <= 8) {
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         // Set new active board to active (red border)
         LinearLayout newBoard = findViewById(getResources().getIdentifier("board_" + activeboard, "id", getPackageName()));
         newBoard.setBackgroundResource(R.drawable.board_active_boarder);
-
+        checkIfBoardWon(boardNum);
 
 
 
@@ -233,7 +233,15 @@ public class MainActivity extends AppCompatActivity {
                 winner = 1;
             }
             boardwinners[boardNum] = winner;       // Mark who won this board
-            checkUltimateWin();                   // Check if whole game won
+                             // Check if whole game won
+             // Apply winner drawable to the board
+            LinearLayout board = findViewById(getResources().getIdentifier("board_" + boardNum, "id", getPackageName()));
+            if (winner == 1) {
+                board.setBackgroundResource(R.drawable.o);
+            } else {
+                board.setBackgroundResource(R.drawable.x);
+            }
+            checkUltimateWin();  
         }
     }
     public void checkUltimateWin(){
