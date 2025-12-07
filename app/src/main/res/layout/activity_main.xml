@@ -19,37 +19,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView"
-
+    <!-- Main game container with outer grid lines -->
+    <LinearLayout
+        android:id="@+id/gameContainer"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="420dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        android:background="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.423"
-        app:srcCompat="@drawable/grid" />
+        app:layout_constraintVertical_bias="0.423">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="420dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/imageView">
-
+        <!-- First row of boards -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="horizontal"
-
-            >
-
+            android:orientation="horizontal">
 
             <include layout="@layout/tic_tac_toe_layout"
                 android:id="@+id/board_0"
@@ -58,9 +48,13 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:tag="board_0"
-                />
+                android:background="@drawable/board_inactive_boarder" />
 
-
+            <!-- Vertical divider -->
+            <View
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/black" />
 
             <include layout="@layout/tic_tac_toe_layout"
                 android:id="@+id/board_1"
@@ -69,8 +63,13 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:tag="board_1"
-                />
+                android:background="@drawable/board_inactive_boarder" />
 
+            <!-- Vertical divider -->
+            <View
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/black" />
 
             <include layout="@layout/tic_tac_toe_layout"
                 android:id="@+id/board_2"
@@ -79,10 +78,17 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:tag="board_2"
-                />
+                android:background="@drawable/board_inactive_boarder" />
 
         </LinearLayout>
 
+        <!-- Horizontal divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@android:color/black" />
+
+        <!-- Second row of boards -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -96,7 +102,13 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:tag="board_3"
-                />
+                android:background="@drawable/board_inactive_boarder" />
+
+            <!-- Vertical divider -->
+            <View
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/black" />
 
             <include layout="@layout/tic_tac_toe_layout"
                 android:id="@+id/board_4"
@@ -105,7 +117,13 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:tag="board_4"
-                />
+                android:background="@drawable/board_inactive_boarder" />
+
+            <!-- Vertical divider -->
+            <View
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/black" />
 
             <include layout="@layout/tic_tac_toe_layout"
                 android:id="@+id/board_5"
@@ -114,10 +132,17 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:tag="board_5"
-                />
+                android:background="@drawable/board_inactive_boarder" />
 
         </LinearLayout>
 
+        <!-- Horizontal divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@android:color/black" />
+
+        <!-- Third row of boards -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -131,7 +156,13 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:tag="board_6"
-                />
+                android:background="@drawable/board_inactive_boarder" />
+
+            <!-- Vertical divider -->
+            <View
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/black" />
 
             <include layout="@layout/tic_tac_toe_layout"
                 android:id="@+id/board_7"
@@ -140,7 +171,13 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:tag="board_7"
-                />
+                android:background="@drawable/board_inactive_boarder" />
+
+            <!-- Vertical divider -->
+            <View
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/black" />
 
             <include layout="@layout/tic_tac_toe_layout"
                 android:id="@+id/board_8"
@@ -149,8 +186,7 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:tag="board_8"
-                />
-
+                android:background="@drawable/board_inactive_boarder" />
 
         </LinearLayout>
     </LinearLayout>
@@ -165,7 +201,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/gameContainer" />
 
     <Button
         android:id="@+id/playAgain"
@@ -176,7 +212,7 @@
         android:onClick="resetButton"
         android:text="Play Again"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintBottom_toTopOf="@+id/gameContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
