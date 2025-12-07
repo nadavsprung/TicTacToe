@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         // Store old active board before changing it
         int oldActiveBoard = activeboard;
         activeboard = cellNum;
+        checkIfBoardWon(boardNum);
 
         // Update board backgrounds - ADD THIS CODE
         if (oldActiveBoard >= 0 && oldActiveBoard <= 8) {
@@ -217,6 +218,27 @@ public class MainActivity extends AppCompatActivity {
         String currentDateAndTime = sdf.format(new Date());
 
         return currentDateAndTime;
+
+    }
+
+    public void checkIfBoardWon(int boardNum) {
+        if (boardwinners[boardNum] != 0) return;  // Already won
+
+        if (arrgame[boardNum].didWin()) {         // Use your existing didWin()
+            int winner;
+
+            if (arrgame[boardNum].getPlayerTurn() == 1) {
+                winner = 2;
+            } else {
+                winner = 1;
+            }
+            boardwinners[boardNum] = winner;       // Mark who won this board
+            checkUltimateWin();                   // Check if whole game won
+        }
+    }
+    public void checkUltimateWin(){
+
+
 
     }
 
