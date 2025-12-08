@@ -3,13 +3,13 @@ package com.nadavsprung.tictactoe;
 public class Game {
 
     // 1 = O, 2 = X, 0 = empty
-    private int playerTurn;
+
     private int[] spot; // Array representing the board (9 positions)
     private int[][] winPositions; // All winning combinations
 
     // Constructor: Initializes the game
     public Game() {
-        this.playerTurn = 2; // X starts the game
+       // X starts the game
 
         // Initialize all spots to 0 (empty)
         this.spot = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -23,14 +23,7 @@ public class Game {
     }
 
     // Getter for player turn
-    public int getPlayerTurn() {
-        return playerTurn;
-    }
 
-    // Setter for player turn
-    public void setPlayerTurn(int playerTurn) {
-        this.playerTurn = playerTurn;
-    }
 
     // Returns the current state of the board
     public int[] getSpot() {
@@ -38,8 +31,8 @@ public class Game {
     }
 
     // Marks a spot for the current player
-    public void setSpot(int num) {
-        this.spot[num] = getPlayerTurn();
+    public void setSpot(int num,int turn) {
+        this.spot[num] =turn;
     }
 
     // Checks if the current player has won

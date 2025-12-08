@@ -21,6 +21,8 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     private Game game; // Game logic handler
+
+    private int playerTurn=2 ; // 1 = O, 2 = X, 0 = empty;
     private SharedPreferences sharedPreferences;
     private String savedUsername;
     Game[] arrgame = new Game[9];
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (boardNum!=activeboard && activeboard!=-1)return;
 
-        arrgame[boardNum].setSpot(cellNum);// Update logic with player move
+        arrgame[boardNum].setSpot(cellNum,playerTurn);// Update logic with player move
 
         // Store old active board before changing it
         int oldActiveBoard = activeboard;
@@ -116,16 +118,16 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        if (game.getPlayerTurn() == 2) {
+        if (playerTurn == 2) {
             ((ImageView) v).setImageResource(R.drawable.x);
-            game.setPlayerTurn(1);
+            playerTurn=1;
             updateText("O's Turn...");
 
             // Delay computer's move by 1 second
             new android.os.Handler().postDelayed(this::updateComputerUIMove, 1000);
         } else {
             ((ImageView) v).setImageResource(R.drawable.o);
-            game.setPlayerTurn(2);
+            playerTurn=2;
             updateText("X's Turn...");
         }
 
@@ -135,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         if (game.didWin()) {
             MyDatabaseHelper db = new MyDatabaseHelper(MainActivity.this);
 
-            if (game.getPlayerTurn() == 1) {
+            if (playerTurn== 1) {
                 updateText("X Won!!!");
                 db.addLog("X", game.getMoves(), getDate());
             } else {
@@ -225,22 +227,18 @@ public class MainActivity extends AppCompatActivity {
         if (boardwinners[boardNum] != 0) return;  // Already won
 
         if (arrgame[boardNum].didWin()) {         // Use your existing didWin()
-            int winner;
+            
 
-            if (arrgame[boardNum].getPlayerTurn() == 1) {
-                winner = 2;
-            } else {
-                winner = 1;
-            }
-            boardwinners[boardNum] = winner;       // Mark who won this board
-                             // Check if whole game won
-             // Apply winner drawable to the board
             LinearLayout board = findViewById(getResources().getIdentifier("board_" + boardNum, "id", getPackageName()));
-            if (winner == 1) {
+            if (playerTurn == 1) {
                 board.setBackgroundResource(R.drawable.o);
+                boardwinners[boardNum] = 1; 
             } else {
                 board.setBackgroundResource(R.drawable.x);
+                boardwinners[boardNum] = 2; 
             }
+                 
+
             checkUltimateWin();  
         }
     }
