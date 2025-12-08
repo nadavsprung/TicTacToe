@@ -85,22 +85,23 @@ public class MainActivity extends AppCompatActivity {
 
     // Called when a player taps a cell
     public void playerTap(View v) {
-        if (gameOver)
-            return;
+      
 
         String tag = v.getTag().toString();
         String[] parts = tag.split("_");
         int boardNum = Integer.parseInt(parts[0]);  // 0-8
         int cellNum = Integer.parseInt(parts[1]);   // 0-8
 
-        if (boardNum!=activeboard && activeboard!=-1)return;
+        if (boardNum != activeboard && activeboard != -1) return;
 
         arrgame[boardNum].setSpot(cellNum,playerTurn);// Update logic with player move
 
         // Store old active board before changing it
         int oldActiveBoard = activeboard;
         activeboard = cellNum;
-       
+        if (boardwinners[activeboard] != 0) {
+            activeboard = -1;  // Set to free choice mode
+        }
 
         // Update board backgrounds - ADD THIS CODE
         if (oldActiveBoard >= 0 && oldActiveBoard <= 8) {
@@ -108,9 +109,11 @@ public class MainActivity extends AppCompatActivity {
             oldBoard.setBackgroundResource(R.drawable.board_inactive_boarder);
         }
 
-        // Set new active board to active (red border)
-        LinearLayout newBoard = findViewById(getResources().getIdentifier("board_" + activeboard, "id", getPackageName()));
-        newBoard.setBackgroundResource(R.drawable.board_active_boarder);
+        // Set new active board to active (red border) - only if valid board number
+        if (activeboard >= 0 && activeboard <= 8) {
+            LinearLayout newBoard = findViewById(getResources().getIdentifier("board_" + activeboard, "id", getPackageName()));
+            newBoard.setBackgroundResource(R.drawable.board_active_boarder);
+        }
         checkIfBoardWon(boardNum);
 
 
@@ -133,21 +136,21 @@ public class MainActivity extends AppCompatActivity {
 
         ((ImageView) v).setClickable(false); // Prevent re-tapping same cell
 
-        // Check for win condition after the move
-        if (game.didWin()) {
-            MyDatabaseHelper db = new MyDatabaseHelper(MainActivity.this);
+        // // Check for win condition after the move
+        // if (game.didWin()) {
+        //     MyDatabaseHelper db = new MyDatabaseHelper(MainActivity.this);
 
-            if (playerTurn== 1) {
-                updateText("X Won!!!");
-                db.addLog("X", game.getMoves(), getDate());
-            } else {
-                updateText("O Won!!!");
-                db.addLog("0", game.getMoves(), getDate());
-            }
-            gameOver = true;
-            gameEnd(); // Show "Play Again" and lock board
+        //     if (playerTurn== 1) {
+        //         updateText("X Won!!!");
+        //         db.addLog("X", game.getMoves(), getDate());
+        //     } else {
+        //         updateText("O Won!!!");
+        //         db.addLog("0", game.getMoves(), getDate());
+        //     }
+        //     gameOver = true;
+        //     gameEnd(); // Show "Play Again" and lock board
 
-        }
+        // }
     }
 
 
@@ -190,11 +193,28 @@ public class MainActivity extends AppCompatActivity {
 
     // Handles the computer's move on the board
     private void updateComputerUIMove() {
-
-        int x = arrgame[activeboard].computerMove();
+        int targetBoard = activeboard;
+        
+        // Handle free choice for computer
+        if (activeboard == -1) {
+            // Pick random available board
+            int[] availableBoards = new int[9];
+            int count = 0;
+            for (int i = 0; i < 9; i++) {
+                if (boardwinners[i] == 0) {  // Board not won
+                    availableBoards[count] = i;
+                    count++;
+                }
+            }
+            if (count > 0) {
+                targetBoard = availableBoards[(int)(Math.random() * count)];
+            }
+        }
+        
+        int x = arrgame[targetBoard].computerMove();
         ImageView v = null;
         // Find the board layout
-        int boardId = getResources().getIdentifier("board_" + activeboard, "id", getPackageName());
+        int boardId = getResources().getIdentifier("board_" + targetBoard, "id", getPackageName());
         LinearLayout board = findViewById(boardId);
 
         // Then find the cell within that board
@@ -237,6 +257,15 @@ public class MainActivity extends AppCompatActivity {
                 board.setBackgroundResource(R.drawable.x);
                 boardwinners[boardNum] = 2; 
             }
+            // Disable all cells in this specific won board
+            for (int cellNum = 0; cellNum < 9; cellNum++) {
+                String cellTag = boardNum + "_" + cellNum;  // e.g., "3_5"
+                ImageView cell = findViewById(android.R.id.content).findViewWithTag(cellTag);
+                if (cell != null) {
+                    cell.setClickable(false);
+                }
+            }
+
                  
 
             checkUltimateWin();  
