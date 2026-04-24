@@ -4,17 +4,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -47,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
     
     // Flag to prevent moves after game ends
     private boolean gameOver = false;
+
+    // Speaks game events out loud
+    private TextToSpeech tts;
+    private boolean ttsReady = false;
 
 
     /**
@@ -83,6 +92,28 @@ public class MainActivity extends AppCompatActivity {
         // Find username TextView and set it
         TextView t = findViewById(R.id.username);
         t.setText(savedUsername);
+
+        tts = new TextToSpeech(this, status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                tts.setLanguage(Locale.US);
+                ttsReady = true;
+            }
+        });
+    }
+
+    private void speak(String text) {
+        if (ttsReady && tts != null) {
+            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "tictactoe");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onDestroy();
     }
     /**
      * SUMMARY: Creates 9 Game objects - one for each of the 9 smaller boards in Ultimate Tic-Tac-Toe
@@ -180,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
         if (playerTurn == 2) {
             // Show X image on the cell
             ((ImageView) v).setImageResource(R.drawable.x);
+            PlacementAnimator.animate(v);
             // Switch to O's turn
             // USAGE: Set playerTurn = 1 (switch to O's turn)
             playerTurn = 1;
@@ -197,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // It was O's turn, show O image
             ((ImageView) v).setImageResource(R.drawable.o);
+            PlacementAnimator.animate(v);
             // Switch to X's turn
             // USAGE: Set playerTurn = 2 (switch to X's turn)
             playerTurn = 2;
@@ -311,18 +344,36 @@ public class MainActivity extends AppCompatActivity {
     private void updateComputerUIMove() {
         // If game is over, don't make computer move
         if (gameOver) return;
-        
-        // Find a valid board to play in
+
+        // Start from the active board
         int targetBoard = activeboard;
-        
-        // If active board is won or invalid, find any available board
-        if (targetBoard == -1 || (targetBoard >= 0 && targetBoard <= 8 && boardwinners[targetBoard] != 0)) {
-            // Find all boards that aren't won and have empty cells
+
+        // If active board is a specific board, make sure it's usable
+        if (targetBoard >= 0 && targetBoard <= 8) {
+            boolean hasEmpty = false;
+
+            // If that board is already won, or has no empty cells, force free choice
+            if (boardwinners[targetBoard] == 0) {
+                int[] spots = arrgame[targetBoard].getSpot();
+                for (int spot : spots) {
+                    if (spot == 0) {
+                        hasEmpty = true;
+                        break;
+                    }
+                }
+            }
+
+            if (boardwinners[targetBoard] != 0 || !hasEmpty) {
+                targetBoard = -1; // treat as free choice
+            }
+        }
+
+        // If we're in free choice mode (or active board was unusable), pick any playable board
+        if (targetBoard == -1) {
             int[] availableBoards = new int[9];
             int count = 0;
             for (int i = 0; i < 9; i++) {
                 if (boardwinners[i] == 0) {
-                    // Check if board has empty cells
                     int[] spots = arrgame[i].getSpot();
                     boolean hasEmpty = false;
                     for (int spot : spots) {
@@ -337,16 +388,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-            if (count > 0) {
-                targetBoard = availableBoards[(int)(Math.random() * count)];
-            } else {
+            if (count == 0) {
                 return; // No available boards
             }
+            targetBoard = availableBoards[(int)(Math.random() * count)];
         }
-        
+
         // Get computer's move (which cell to play)
         int x = arrgame[targetBoard].computerMove();
-        if (x == -1) return; // Board is full, shouldn't happen but handle it
+        if (x == -1) return; // Safety: board is full
         
         // Find the cell and make the move
         int boardId = getResources().getIdentifier("board_" + targetBoard, "id", getPackageName());
@@ -368,6 +418,13 @@ public class MainActivity extends AppCompatActivity {
     public void goToLog(View v) {
         Intent i = new Intent(MainActivity.this, WinLogActivity.class);
         startActivity(i);
+    }
+
+    public void logout(View v) {
+        FirebaseAuth.getInstance().signOut();
+        getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE).edit().clear().apply();
+        startActivity(new Intent(MainActivity.this, OpenActivity.class));
+        finish();
     }
 
     /**
@@ -402,12 +459,14 @@ public class MainActivity extends AppCompatActivity {
                 // Mark that O won this board
                 // USAGE: Set boardwinners[boardNum] = 1 (mark O won this board)
                 boardwinners[boardNum] = 1;
+                speak("O captured a board");
             } else {
                 // X won, show X background
                 board.setBackgroundResource(R.drawable.x);
                 // Mark that X won this board
                 // USAGE: Set boardwinners[boardNum] = 2 (mark X won this board)
                 boardwinners[boardNum] = 2;
+                speak("X captured a board");
             }
             // Disable all cells in this won board so no more moves can be made
             for (int cellNum = 0; cellNum < 9; cellNum++) {
@@ -469,6 +528,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 // Update status text (using the same TextView as turn messages)
                 updateText(winnerMessage);
+                speak(winnerMessage);
 
                 // Count how many sub-boards the winner captured in the Ultimate game
                 int boardsWonByWinner = 0;
