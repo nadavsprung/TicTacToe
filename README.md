@@ -1,5 +1,5 @@
 # TicTacToe Android App
-![App Demo](tic-min-min.gif)
+![App Demo](ultimate.gif)
 
 A classic **Ultimate TicTacToe** game built for Android, featuring Firebase authentication, text-to-speech, move animations, and game history.
 
