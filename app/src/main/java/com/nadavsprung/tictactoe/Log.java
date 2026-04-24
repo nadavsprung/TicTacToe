@@ -3,13 +3,13 @@ package com.nadavsprung.tictactoe;
 public class Log {
     private long id;
     private String winner;
-    private int moves;
+    private int boardsWon;
     private String date;
 
-    public Log(long id, String winner, int moves, String date) {
+    public Log(long id, String winner, int boardsWon, String date) {
         this.id = id;
         this.winner = winner;
-        this.moves = moves;
+        this.boardsWon = boardsWon;
         this.date = date;
     }
 
@@ -29,12 +29,12 @@ public class Log {
         this.winner = winner;
     }
 
-    public int getMoves() {
-        return moves;
+    public int getBoardsWon() {
+        return boardsWon;
     }
 
-    public void setMoves(int moves) {
-        this.moves = moves;
+    public void setBoardsWon(int boardsWon) {
+        this.boardsWon = boardsWon;
     }
 
     public String getDate() {
@@ -50,7 +50,7 @@ public class Log {
         return "Log{" +
                 "id=" + id +
                 ", winner='" + winner + '\'' +
-                ", moves=" + moves +
+                ", boardsWon=" + boardsWon +
                 ", date='" + date + '\'' +
                 '}';
     }
