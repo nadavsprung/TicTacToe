@@ -13,12 +13,12 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
 
     private Context context;
     private static final String DATABASE_NAME = "WinLog.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private static final String TABLE_NAME = "my_winnlog";
     private static final String COLUMN_ID = "_id";
     private static final String COLUMN_WINNER = "winner";
-    private static final String COLUMN_MOVES = "moves";
+    private static final String COLUMN_BOARDS_WON = "boards_won";
     private static final String COLUMN_DATE = "date";
 
     // Constructor
@@ -33,7 +33,7 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
         String query = "CREATE TABLE " + TABLE_NAME + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_WINNER + " TEXT, " +
-                COLUMN_MOVES + " INTEGER, " +
+                COLUMN_BOARDS_WON + " INTEGER, " +
                 COLUMN_DATE + " TEXT);";
         db.execSQL(query);
     }
@@ -46,12 +46,12 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Insert a new log into the database
-    void addLog(String winner, int moves, String date) {
+    void addLog(String winner, int boardsWon, String date) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         cv.put(COLUMN_WINNER, winner);
-        cv.put(COLUMN_MOVES, moves);
+        cv.put(COLUMN_BOARDS_WON, boardsWon);
         cv.put(COLUMN_DATE, date);
 
         long result = db.insert(TABLE_NAME, null, cv);

@@ -457,15 +457,27 @@ public class MainActivity extends AppCompatActivity {
                 // Someone won! End the game
                 gameOver = true;
                 String winnerMessage;
+                String winnerLabel;
                 if (boardA == 1) {
                     // O won
                     winnerMessage = "O Won!";
+                    winnerLabel = "O";
                 } else {
                     // X won
                     winnerMessage = "X Won!";
+                    winnerLabel = "X";
                 }
                 // Update status text (using the same TextView as turn messages)
                 updateText(winnerMessage);
+
+                // Count how many sub-boards the winner captured in the Ultimate game
+                int boardsWonByWinner = 0;
+                for (int j = 0; j < boardwinners.length; j++) {
+                    if (boardwinners[j] == boardA) boardsWonByWinner++;
+                }
+                MyDatabaseHelper db = new MyDatabaseHelper(MainActivity.this);
+                db.addLog(winnerLabel, boardsWonByWinner, getDate());
+
                 // Show "Play Again" button
                 gameEnd();
                 
