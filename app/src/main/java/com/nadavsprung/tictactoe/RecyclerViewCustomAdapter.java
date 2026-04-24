@@ -15,14 +15,14 @@ public class RecyclerViewCustomAdapter extends RecyclerView.Adapter<RecyclerView
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textViewId;
         private final TextView textViewWinner;
-        private final TextView textViewMoves;
+        private final TextView textViewBoardsWon;
         private final TextView textViewDate;
 
         public ViewHolder(View view) {
             super(view);
             textViewId = view.findViewById(R.id.textViewid);
             textViewWinner = view.findViewById(R.id.textViewWinner);
-            textViewMoves = view.findViewById(R.id.textViewMoves);
+            textViewBoardsWon = view.findViewById(R.id.textViewBoardsWon);
             textViewDate = view.findViewById(R.id.textViewDate);
         }
     }
@@ -45,7 +45,7 @@ public class RecyclerViewCustomAdapter extends RecyclerView.Adapter<RecyclerView
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         viewHolder.textViewId.setText(String.valueOf(localDataSet[position].getId()));
         viewHolder.textViewWinner.setText(localDataSet[position].getWinner());
-        viewHolder.textViewMoves.setText(String.valueOf(localDataSet[position].getMoves()));
+        viewHolder.textViewBoardsWon.setText(String.valueOf(localDataSet[position].getBoardsWon()));
         viewHolder.textViewDate.setText(localDataSet[position].getDate());
     }
 

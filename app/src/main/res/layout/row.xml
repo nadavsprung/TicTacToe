@@ -33,7 +33,7 @@
             android:text="Player X" />
 
         <TextView
-            android:id="@+id/textViewMoves"
+            android:id="@+id/textViewBoardsWon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
