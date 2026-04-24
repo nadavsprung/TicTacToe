@@ -21,7 +21,8 @@
         android:id="@+id/editUsername"
         android:layout_width="300dp"
         android:layout_height="40dp"
-        android:hint="Username"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
         android:fontFamily="@font/assistant_bold"
         android:padding="8dp"
         android:background="@android:drawable/edit_text" />

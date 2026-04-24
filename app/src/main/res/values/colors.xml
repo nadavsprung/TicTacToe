@@ -2,4 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gradientStart">#4776E6</color>
+    <color name="gradientEnd">#8E54E9</color>
+    <color name="primaryIndigo">#5C6BC0</color>
+    <color name="textDark">#1A1A2E</color>
+    <color name="textHint">#9E9E9E</color>
+    <color name="errorRed">#EF4444</color>
 </resources>

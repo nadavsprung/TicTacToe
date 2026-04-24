@@ -16,6 +16,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -311,18 +313,36 @@ public class MainActivity extends AppCompatActivity {
     private void updateComputerUIMove() {
         // If game is over, don't make computer move
         if (gameOver) return;
-        
-        // Find a valid board to play in
+
+        // Start from the active board
         int targetBoard = activeboard;
-        
-        // If active board is won or invalid, find any available board
-        if (targetBoard == -1 || (targetBoard >= 0 && targetBoard <= 8 && boardwinners[targetBoard] != 0)) {
-            // Find all boards that aren't won and have empty cells
+
+        // If active board is a specific board, make sure it's usable
+        if (targetBoard >= 0 && targetBoard <= 8) {
+            boolean hasEmpty = false;
+
+            // If that board is already won, or has no empty cells, force free choice
+            if (boardwinners[targetBoard] == 0) {
+                int[] spots = arrgame[targetBoard].getSpot();
+                for (int spot : spots) {
+                    if (spot == 0) {
+                        hasEmpty = true;
+                        break;
+                    }
+                }
+            }
+
+            if (boardwinners[targetBoard] != 0 || !hasEmpty) {
+                targetBoard = -1; // treat as free choice
+            }
+        }
+
+        // If we're in free choice mode (or active board was unusable), pick any playable board
+        if (targetBoard == -1) {
             int[] availableBoards = new int[9];
             int count = 0;
             for (int i = 0; i < 9; i++) {
                 if (boardwinners[i] == 0) {
-                    // Check if board has empty cells
                     int[] spots = arrgame[i].getSpot();
                     boolean hasEmpty = false;
                     for (int spot : spots) {
@@ -337,16 +357,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-            if (count > 0) {
-                targetBoard = availableBoards[(int)(Math.random() * count)];
-            } else {
+            if (count == 0) {
                 return; // No available boards
             }
+            targetBoard = availableBoards[(int)(Math.random() * count)];
         }
-        
+
         // Get computer's move (which cell to play)
         int x = arrgame[targetBoard].computerMove();
-        if (x == -1) return; // Board is full, shouldn't happen but handle it
+        if (x == -1) return; // Safety: board is full
         
         // Find the cell and make the move
         int boardId = getResources().getIdentifier("board_" + targetBoard, "id", getPackageName());
@@ -368,6 +387,13 @@ public class MainActivity extends AppCompatActivity {
     public void goToLog(View v) {
         Intent i = new Intent(MainActivity.this, WinLogActivity.class);
         startActivity(i);
+    }
+
+    public void logout(View v) {
+        FirebaseAuth.getInstance().signOut();
+        getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE).edit().clear().apply();
+        startActivity(new Intent(MainActivity.this, OpenActivity.class));
+        finish();
     }
 
     /**
