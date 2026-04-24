@@ -4,11 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.Locale;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,6 +53,10 @@ public class MainActivity extends AppCompatActivity {
     // Flag to prevent moves after game ends
     private boolean gameOver = false;
 
+    // Speaks game events out loud
+    private TextToSpeech tts;
+    private boolean ttsReady = false;
+
 
     /**
      * SUMMARY: Initializes the app when it starts - sets up UI, loads saved data, and prepares the game
@@ -85,6 +92,28 @@ public class MainActivity extends AppCompatActivity {
         // Find username TextView and set it
         TextView t = findViewById(R.id.username);
         t.setText(savedUsername);
+
+        tts = new TextToSpeech(this, status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                tts.setLanguage(Locale.US);
+                ttsReady = true;
+            }
+        });
+    }
+
+    private void speak(String text) {
+        if (ttsReady && tts != null) {
+            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "tictactoe");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onDestroy();
     }
     /**
      * SUMMARY: Creates 9 Game objects - one for each of the 9 smaller boards in Ultimate Tic-Tac-Toe
@@ -182,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
         if (playerTurn == 2) {
             // Show X image on the cell
             ((ImageView) v).setImageResource(R.drawable.x);
+            PlacementAnimator.animate(v);
             // Switch to O's turn
             // USAGE: Set playerTurn = 1 (switch to O's turn)
             playerTurn = 1;
@@ -199,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // It was O's turn, show O image
             ((ImageView) v).setImageResource(R.drawable.o);
+            PlacementAnimator.animate(v);
             // Switch to X's turn
             // USAGE: Set playerTurn = 2 (switch to X's turn)
             playerTurn = 2;
@@ -428,12 +459,14 @@ public class MainActivity extends AppCompatActivity {
                 // Mark that O won this board
                 // USAGE: Set boardwinners[boardNum] = 1 (mark O won this board)
                 boardwinners[boardNum] = 1;
+                speak("O captured a board");
             } else {
                 // X won, show X background
                 board.setBackgroundResource(R.drawable.x);
                 // Mark that X won this board
                 // USAGE: Set boardwinners[boardNum] = 2 (mark X won this board)
                 boardwinners[boardNum] = 2;
+                speak("X captured a board");
             }
             // Disable all cells in this won board so no more moves can be made
             for (int cellNum = 0; cellNum < 9; cellNum++) {
@@ -483,15 +516,28 @@ public class MainActivity extends AppCompatActivity {
                 // Someone won! End the game
                 gameOver = true;
                 String winnerMessage;
+                String winnerLabel;
                 if (boardA == 1) {
                     // O won
                     winnerMessage = "O Won!";
+                    winnerLabel = "O";
                 } else {
                     // X won
                     winnerMessage = "X Won!";
+                    winnerLabel = "X";
                 }
                 // Update status text (using the same TextView as turn messages)
                 updateText(winnerMessage);
+                speak(winnerMessage);
+
+                // Count how many sub-boards the winner captured in the Ultimate game
+                int boardsWonByWinner = 0;
+                for (int j = 0; j < boardwinners.length; j++) {
+                    if (boardwinners[j] == boardA) boardsWonByWinner++;
+                }
+                MyDatabaseHelper db = new MyDatabaseHelper(MainActivity.this);
+                db.addLog(winnerLabel, boardsWonByWinner, getDate());
+
                 // Show "Play Again" button
                 gameEnd();
                 

@@ -45,6 +45,12 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
+    }
+
     // Insert a new log into the database
     void addLog(String winner, int moves, String date) {
         SQLiteDatabase db = this.getWritableDatabase();
