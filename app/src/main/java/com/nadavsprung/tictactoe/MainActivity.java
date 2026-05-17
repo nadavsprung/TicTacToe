@@ -179,15 +179,16 @@ public class MainActivity extends AppCompatActivity {
         int oldActiveBoard = activeboard;
         // New active board = the cell number that was clicked
         activeboard = cellNum;
-        // If the new active board is already won, allow free choice
-        // USAGE: Check if boardwinners[activeboard] != 0 (board is already won)
-        // USAGE: Set activeboard = -1 (switch to free choice mode)
-        if (boardwinners[activeboard] != 0) {
+
+        // Check if this board was just won FIRST (so the won-board check below
+        // sees an up-to-date boardwinners — handles the case where the winning
+        // move also directs play to the board that was just won)
+        checkIfBoardWon(boardNum);
+
+        // If the new active board is already won or has no empty cells, allow free choice
+        if (boardwinners[activeboard] != 0 || isBoardFull(activeboard)) {
             activeboard = -1;
         }
-
-        // Check if this board was just won FIRST (before updating red borders)
-        checkIfBoardWon(boardNum);
         
         // Remove red border from old active board (only if it's not won)
         if (oldActiveBoard >= 0 && oldActiveBoard <= 8 && boardwinners[oldActiveBoard] == 0) {
@@ -435,6 +436,14 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentDateAndTime = sdf.format(new Date());
         return currentDateAndTime;
+    }
+
+    private boolean isBoardFull(int boardNum) {
+        if (boardNum < 0 || boardNum > 8) return false;
+        for (int s : arrgame[boardNum].getSpot()) {
+            if (s == 0) return false;
+        }
+        return true;
     }
 
     /**
